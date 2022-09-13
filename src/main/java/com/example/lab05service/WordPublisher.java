@@ -2,7 +2,6 @@ package com.example.lab05service;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,8 +45,13 @@ public class WordPublisher {
 
     @RequestMapping("delGood/{s}")
     public ArrayList<String> delGoodWord(@PathVariable("s") String s){
-        words.goodWords.add(s);
+        words.goodWords.remove(s);
         return words.goodWords;
+    }
+
+    @RequestMapping("/proof/{s}")
+    public String proofSentence(@PathVariable("s") String s) {
+        return null;
     }
 
 }
