@@ -51,6 +51,24 @@ public class WordPublisher {
 
     @RequestMapping("/proof/{s}")
     public String proofSentence(@PathVariable("s") String s) {
+        boolean bad = false;
+        boolean good = false;
+
+        for (String word : s.split(" ")) {
+            good = words.goodWords.contains(word) || good;
+            bad = words.badWords.contains(word) || bad;
+        }
+
+        if (bad && good) {
+            rabbit.convertAndSend("Fanout", "", s);
+            return "Found bad & good word";
+        } else if (good) {
+            rabbit.convertAndSend("Direct", "good", s);
+            return "Found good word";
+        } else if (bad) {
+            rabbit.convertAndSend("Direct", "bad", s);
+            return "Found bad word";
+        }
         return null;
     }
 
